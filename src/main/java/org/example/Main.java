@@ -16,10 +16,15 @@ import org.example.Movies;
 public class Main {
     public static void main(String[] args) {
         Movies movies = new Movies();
+        Ratings ratings = new Ratings();
+
         List<Movie> movieList = movies.getMovies();
+
         for (int i = 0; i < movieList.size(); i++) {
             Movie movie = movieList.get(i);
-            System.out.println((i + 1) + ". " + movie.getTitle() + " (" + movie.getYear() + ")");
+            ratings.movieRating(movie);
+
+            System.out.println(i + ". " + movie.getTitle() + " (" + movie.getYear() + "): \n" + movie.ratingBySource("Rotten Tomatoes"));
         }
     }
 }

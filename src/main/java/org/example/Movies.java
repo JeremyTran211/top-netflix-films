@@ -47,7 +47,8 @@ public class Movies {
         }
 
         //Complete the run
-        while(total > films.size()) {
+        //while(total > films.size()) {
+        for (int i = 0; i < 5; i++) {
             System.out.print(films.size());
             String uriString = "https://unogs-unogs-v1.p.rapidapi.com/search/titles?country_list=78&offset=" + offset + "&order_by=date&type=movie";
 
@@ -84,5 +85,3 @@ public class Movies {
         return film;
     }
 }
-
-
