@@ -29,13 +29,13 @@ public class Movie {
         return ratings;
     }
 
-    public List<Rating> ratingBySource(String source) {
-        List<Rating> filterRatings = new ArrayList<>();
+    public Rating ratingBySource(String source) {
+
         for (Rating rating : ratings) {
             if(rating.getSource().equalsIgnoreCase((source)))
-                filterRatings.add(rating);
+                return rating;
         }
-        return filterRatings;
+        return null;
     }
 
     @Override
