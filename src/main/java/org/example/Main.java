@@ -9,10 +9,9 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
+import java.util.*;
 import java.util.List;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 import org.example.Movies;
 
 public class Main {
@@ -37,9 +36,12 @@ public class Main {
             }
 
         }
-        List<Map.Entry<String, Float>> sortedEntries = movieDict.entrySet();
 
-        for (Map.Entry<String, Float> entry : movieDict.entrySet()) {
+        List<Map.Entry<String, Float>> entryList = new ArrayList<>(movieDict.entrySet());
+
+        Collections.sort(entryList, (e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+
+        for (Map.Entry<String, Float> entry : entryList) {
             System.out.println("Title: " + entry.getKey() + ", Rating: " + entry.getValue());
         }
 
