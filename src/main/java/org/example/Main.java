@@ -1,8 +1,10 @@
 package org.example;
 
 import java.util.*;
+import java.io.*;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.Map.Entry;
 
 
 public class Main {
@@ -50,9 +52,17 @@ public class Main {
         List<Map.Entry<String, Float>> sortedEntries = new ArrayList<>(movieDict.entrySet());
         sortedEntries.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
 
-        for (Map.Entry<String, Float> entry : sortedEntries) {
-            System.out.println("Title: " + entry.getKey() + ", Rating: " + entry.getValue());
+        try (PrintWriter writer = new PrintWriter(new File("movies.csv"))) {
+
+            for (Entry<String, Float> entry : sortedEntries) {
+                writer.println(entry.getKey() + ": " + entry.getValue());
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("An error occurred while writing the CSV file: " + e.getMessage());
+            e.printStackTrace();
         }
 
+        System.out.println("CSV file was created successfully.");
     }
+
 }
