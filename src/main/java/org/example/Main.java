@@ -1,47 +1,56 @@
 package org.example;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpHeaders;
-import java.io.IOException;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.*;
 
-import org.example.Movies;
 
 public class Main {
+
+    public static void processMovie(Movie movie, Map<String, Float> movieDict, Ratings ratings){
+        ratings.movieRating(movie);
+        Rating rottenTRating = movie.ratingBySource("Rotten Tomatoes");
+        if(rottenTRating != null){
+            synchronized (movieDict){
+                movieDict.put(movie.getTitle(), rottenTRating.getValue());
+            }
+
+        }
+    }
     public static void main(String[] args) {
         Movies movies = new Movies();
         Ratings ratings = new Ratings();
 
         List<Movie> movieList = movies.getMovies();
-        Map<String, Float> movieDict = new HashMap<>();
+        Map<String, Float> movieDict = new ConcurrentHashMap<>();
         System.out.println("\nThis is the size: " + movieList.size());
 
+        int numberOfThreads = Math.max(1,Runtime.getRuntime().availableProcessors() / 2);
+        ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
+
         for (int i = 0; i < movieList.size(); i++) {
-            if (i % 10 == 0){
-                System.out.println(i);
+            final Movie movie = movieList.get(i);
+            try {
+                executor.submit(() -> processMovie(movie, movieDict, ratings));
+            } catch (RejectedExecutionException e) {
+                System.err.println("Failed to submit task: " + e.getMessage());
             }
-            Movie movie = movieList.get(i);
-            ratings.movieRating(movie);
-
-            Rating rottenTRating = movie.ratingBySource("Rotten Tomatoes");
-            if(rottenTRating != null) {
-               movieDict.put(movie.getTitle(), rottenTRating.getValue());
-            }
-
         }
 
-        List<Map.Entry<String, Float>> entryList = new ArrayList<>(movieDict.entrySet());
+        executor.shutdown();
+        try {
+            if (!executor.awaitTermination(60, TimeUnit.MINUTES)) {
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            executor.shutdownNow();
+        }
 
-        Collections.sort(entryList, (e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+        List<Map.Entry<String, Float>> sortedEntries = new ArrayList<>(movieDict.entrySet());
+        sortedEntries.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
 
-        for (Map.Entry<String, Float> entry : entryList) {
+        for (Map.Entry<String, Float> entry : sortedEntries) {
             System.out.println("Title: " + entry.getKey() + ", Rating: " + entry.getValue());
         }
 

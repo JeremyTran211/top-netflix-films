@@ -48,25 +48,25 @@ public class Movies {
 
         //Complete the run
         //while(total > films.size()) {
-//        for (int i = 0; i <= 1; i++) {
-//            System.out.print(films.size());
-//            String uriString = "https://unogs-unogs-v1.p.rapidapi.com/search/titles?country_list=78&offset=" + offset + "&order_by=date&type=movie";
-//
-//            request = HttpRequest.newBuilder()
-//                    .uri(URI.create(uriString))
-//                    .header("X-RapidAPI-Key", "133e9bfae6mshb9de6d3c5b6cbc3p115558jsnd9346f6be764")
-//                    .header("X-RapidAPI-Host", "unogs-unogs-v1.p.rapidapi.com")
-//                    .build();
-//            try {
-//                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-//                List<Movie> newMovies = GetTitles(response.body());
-//                films.addAll(newMovies);
-//                offset += newMovies.size();
-//
-//            } catch (IOException | InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        for (int i = 0; i <= 19; i++) {
+            System.out.print(films.size());
+            String uriString = "https://unogs-unogs-v1.p.rapidapi.com/search/titles?country_list=78&offset=" + offset + "&order_by=date&type=movie";
+
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create(uriString))
+                    .header("X-RapidAPI-Key", "133e9bfae6mshb9de6d3c5b6cbc3p115558jsnd9346f6be764")
+                    .header("X-RapidAPI-Host", "unogs-unogs-v1.p.rapidapi.com")
+                    .build();
+            try {
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                List<Movie> newMovies = GetTitles(response.body());
+                films.addAll(newMovies);
+                offset += newMovies.size();
+
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         return films;
     }
     private List<Movie> GetTitles(String jsonRes) {
