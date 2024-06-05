@@ -15,6 +15,7 @@ import com.google.gson.JsonParser;
 
 public class Movies {
      public List<Movie> getMovies(String genreNum) {
+         // For the completed set of movies
          List<Movie> films = new ArrayList<>();
          int offset = 0;
          int total = 100;
@@ -71,9 +72,10 @@ public class Movies {
         return films;
     }
     private List<Movie> GetTitles(String jsonRes) {
-        Gson gson = new Gson();
+
         JsonObject jsonObject = JsonParser.parseString(jsonRes).getAsJsonObject();
         JsonArray results = jsonObject.getAsJsonArray("results");
+        // For the set of 100 movies
         List<Movie> film = new ArrayList<>();
 
         for(int i = 0; i < results.size(); i++) {

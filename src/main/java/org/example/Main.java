@@ -22,7 +22,7 @@ public class Main {
     public static void main(String[] args) {
         Movies movies = new Movies();
         Ratings ratings = new Ratings();
-        String genreNum = "801362";
+        String genreNum = "1365";
 
         List<Movie> movieList = movies.getMovies(genreNum);
         Map<String, Float> movieDict = new ConcurrentHashMap<>();
