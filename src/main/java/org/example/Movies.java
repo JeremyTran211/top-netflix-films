@@ -14,15 +14,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class Movies {
-     public List<Movie> getMovies() {
+     public List<Movie> getMovies(String genreNum) {
          List<Movie> films = new ArrayList<>();
          int offset = 0;
          int total = 100;
+         String URL = String.format("https://unogs-unogs-v1.p.rapidapi.com/search/titles?country_list=78&order_by=date&type=movie&genre_list=%s", genreNum);
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 //Change URL to change filter
-                .uri(URI.create("https://unogs-unogs-v1.p.rapidapi.com/search/titles?country_list=78&order_by=date&type=movie"))
+                .uri(URI.create(URL))
                 .header("X-RapidAPI-Key", "133e9bfae6mshb9de6d3c5b6cbc3p115558jsnd9346f6be764")
                 .header("X-RapidAPI-Host", "unogs-unogs-v1.p.rapidapi.com")
                 .build();
@@ -48,25 +49,25 @@ public class Movies {
 
         //Complete the run
         //while(total > films.size()) {
-        for (int i = 0; i <= 10; i++) {
-            System.out.print(films.size());
-            String uriString = "https://unogs-unogs-v1.p.rapidapi.com/search/titles?country_list=78&offset=" + offset + "&order_by=date&type=movie";
-
-            request = HttpRequest.newBuilder()
-                    .uri(URI.create(uriString))
-                    .header("X-RapidAPI-Key", "133e9bfae6mshb9de6d3c5b6cbc3p115558jsnd9346f6be764")
-                    .header("X-RapidAPI-Host", "unogs-unogs-v1.p.rapidapi.com")
-                    .build();
-            try {
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                List<Movie> newMovies = GetTitles(response.body());
-                films.addAll(newMovies);
-                offset += newMovies.size();
-
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+//        for (int i = 0; i <= 10; i++) {
+//            System.out.print(films.size());
+//            String uriString = "https://unogs-unogs-v1.p.rapidapi.com/search/titles?country_list=78&offset=" + offset + "&order_by=date&type=movie";
+//
+//            request = HttpRequest.newBuilder()
+//                    .uri(URI.create(uriString))
+//                    .header("X-RapidAPI-Key", "133e9bfae6mshb9de6d3c5b6cbc3p115558jsnd9346f6be764")
+//                    .header("X-RapidAPI-Host", "unogs-unogs-v1.p.rapidapi.com")
+//                    .build();
+//            try {
+//                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+//                List<Movie> newMovies = GetTitles(response.body());
+//                films.addAll(newMovies);
+//                offset += newMovies.size();
+//
+//            } catch (IOException | InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
         return films;
     }
     private List<Movie> GetTitles(String jsonRes) {

@@ -22,8 +22,9 @@ public class Main {
     public static void main(String[] args) {
         Movies movies = new Movies();
         Ratings ratings = new Ratings();
+        String genreNum = "801362";
 
-        List<Movie> movieList = movies.getMovies();
+        List<Movie> movieList = movies.getMovies(genreNum);
         Map<String, Float> movieDict = new ConcurrentHashMap<>();
         System.out.println("\nThis is the size: " + movieList.size());
 
