@@ -22,9 +22,49 @@ public class Main {
     public static void main(String[] args) {
         Movies movies = new Movies();
         Ratings ratings = new Ratings();
-        String genreNum = "1365";
+        int genreID = 0;
 
-        List<Movie> movieList = movies.getMovies(genreNum);
+        HashMap<String, Integer> genreMap = new HashMap<String, Integer>();
+        genreMap.put("Action", 801362);
+        genreMap.put("Anime", 7424);
+        genreMap.put("Children", 783);
+        genreMap.put("Classic", 31574);
+        genreMap.put("Comedy", 6548);
+        genreMap.put("Documentaries", 6839);
+        genreMap.put("Dramas", 5763);
+        genreMap.put("Horror", 8711);
+        genreMap.put("Music", 1701);
+        genreMap.put("Romantic", 8883);
+        genreMap.put("Sci-fi & Fantasy", 1492);
+        genreMap.put("Sports", 4370);
+        genreMap.put("Thrillers", 8933);
+        genreMap.put("TV Shows", 83);
+
+        List<String> genres = new ArrayList<>(genreMap.keySet());
+
+        System.out.println("Select a genre");
+        for(int i = 0; i < genres.size(); i++){
+            System.out.println((i + 1) + ". " + genres.get(i));
+        }
+
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+
+        try {
+            int index = Integer.parseInt(input) - 1;
+            if (index >= 0 && index < genres.size()) {
+                genreID = genreMap.get(genres.get(index));
+            }
+
+        } catch(NumberFormatException e) {
+            input = input.trim();
+
+            if(genreMap.containsKey(input)) {
+                genreID = genreMap.get(input);
+            }
+        }
+
+        List<Movie> movieList = movies.getMovies(genreID);
         Map<String, Float> movieDict = new ConcurrentHashMap<>();
         System.out.println("\nThis is the size: " + movieList.size());
 

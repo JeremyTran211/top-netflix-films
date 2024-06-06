@@ -14,7 +14,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class Movies {
-     public List<Movie> getMovies(String genreNum) {
+     public List<Movie> getMovies(int genreNum) {
          // For the completed set of movies
          List<Movie> films = new ArrayList<>();
          int offset = 0;
